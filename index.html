@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Everything ❤️</title>
+    <style>
+        /* --- GLOBAL STYLES & LUXURY COLORS --- */
+        :root {
+            --primary: #ff2a5f;
+            --secondary: #ff7b9c;
+            --text-light: #ffffff;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+        
+        body, html {
+            margin: 0; padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-light);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            
+            /* DYNAMIC MOVING GRADIENT BACKGROUND */
+            background: linear-gradient(-45deg, #0f0c29, #302b63, #1a0b2e, #2b081d);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- PURE CSS FLOATING BACKGROUND ORBS --- */
+        .bg-bubbles {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; /* Keeps them behind the text and cards */
+            overflow: hidden;
+            margin: 0; padding: 0;
+        }
+        .bg-bubbles li {
+            position: absolute;
+            list-style: none;
+            display: block;
+            width: 40px; height: 40px;
+            background: rgba(255, 42, 95, 0.15);
+            bottom: -150px;
+            animation: floatUp 25s infinite linear;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(255, 42, 95, 0.4);
+        }
+        /* Different sizes, speeds, and positions for each orb */
+        .bg-bubbles li:nth-child(1) { left: 10%; width: 80px; height: 80px; animation-duration: 20s; }
+        .bg-bubbles li:nth-child(2) { left: 20%; width: 20px; height: 20px; animation-duration: 25s; animation-delay: 2s; }
+        .bg-bubbles li:nth-child(3) { left: 25%; width: 50px; height: 50px; animation-duration: 28s; animation-delay: 4s; }
+        .bg-bubbles li:nth-child(4) { left: 40%; width: 60px; height: 60px; animation-duration: 22s; background: rgba(255, 123, 156, 0.15); }
+        .bg-bubbles li:nth-child(5) { left: 70%; width: 30px; height: 30px; animation-duration: 29s; animation-delay: 1s; }
+        .bg-bubbles li:nth-child(6) { left: 80%; width: 100px; height: 100px; animation-duration: 32s; animation-delay: 3s; background: rgba(255, 42, 95, 0.1); }
+        .bg-bubbles li:nth-child(7) { left: 32%; width: 120px; height: 120px; animation-duration: 30s; animation-delay: 7s; }
+        .bg-bubbles li:nth-child(8) { left: 55%; width: 40px; height: 40px; animation-duration: 24s; animation-delay: 15s; }
+        .bg-bubbles li:nth-child(9) { left: 25%; width: 10px; height: 10px; animation-duration: 27s; animation-delay: 2s; background: rgba(255, 123, 156, 0.2); }
+        .bg-bubbles li:nth-child(10) { left: 90%; width: 70px; height: 70px; animation-duration: 21s; animation-delay: 11s; }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; border-radius: 50%; }
+            100% { transform: translateY(-1200px) rotate(720deg); opacity: 0; border-radius: 10%; }
+        }
+
+        /* --- SCROLL ANIMATIONS (The "Cool" Effect) --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- TEXT ANIMATIONS --- */
+        .glowing-text {
+            background: linear-gradient(90deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 3s infinite linear;
+            font-size: 3.5rem;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        @keyframes shine {
+            0% { background-position: -500px; }
+            100% { background-position: 500px; }
+        }
+
+        /* --- COUNTDOWN SCREEN --- */
+        #countdown-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100vh;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 9999;
+            transition: opacity 2s ease-out;
+        }
+        .timer-box { font-size: 4rem; font-weight: bold; text-shadow: 0 0 20px var(--primary); letter-spacing: 3px; }
+        .waiting-text { margin-top: 20px; font-size: 1.5rem; color: #ddd; font-style: italic; }
+
+        /* --- MAIN WEBSITE STRUCTURE --- */
+        #main-website { display: none; opacity: 0; animation: fadeIn 3s forwards; }
+        @keyframes fadeIn { to { opacity: 1; } }
+
+        section {
+            min-height: 100vh;
+            padding: 80px 20px;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        p { font-size: 1.3rem; line-height: 1.8; text-align: center; color: #ddd; margin-bottom: 30px; }
+        .quote { font-size: 1.8rem; font-style: italic; color: var(--secondary); text-align: center; padding: 40px; border-left: 4px solid var(--primary); background: var(--glass-bg); border-radius: 0 15px 15px 0; }
+
+        /* --- GLASSMORPHISM CARDS (Photos & Media) --- */
+        .media-container { display: flex; gap: 30px; flex-wrap: wrap; justify-content: center; width: 100%; }
+        .glass-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 15px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+        .glass-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 15px 40px 0 rgba(255, 42, 95, 0.4);
+        }
+        .glass-card img, .glass-card video { width: 100%; border-radius: 12px; object-fit: cover; }
+        .glass-card .caption { text-align: center; margin-top: 15px; font-size: 1.1rem; color: #fff; font-weight: 500;}
+
+        audio { width: 100%; margin-top: 20px; border-radius: 30px; }
+        audio::-webkit-media-controls-panel { background-color: var(--secondary); }
+
+        /* --- BUTTONS --- */
+        .btn {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white; border: none; padding: 15px 30px;
+            font-size: 1.2rem; border-radius: 30px; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255,42,95,0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn:hover { transform: scale(1.05); box-shadow: 0 6px 20px rgba(255,42,95,0.6); }
+
+        /* --- MINI GAMES STYLES --- */
+        .game-container {
+            background: var(--glass-bg); border: 1px solid var(--glass-border); backdrop-filter: blur(10px);
+            padding: 40px; border-radius: 20px; text-align: center; width: 100%; max-width: 600px;
+        }
+        .surprise-box {
+            display: none; margin-top: 20px; padding: 20px; background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px; border: 2px dashed var(--secondary); color: #fff; font-size: 1.3rem;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes popIn { 0% { transform: scale(0); } 100% { transform: scale(1); } }
+
+        /* Game 2: Memory Match */
+        .memory-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 20px; }
+        .m-card { height: 80px; background: var(--primary); display: flex; justify-content: center; align-items: center; font-size: 2rem; cursor: pointer; border-radius: 10px; transition: transform 0.3s; }
+        .m-card.flipped { background: white; cursor: default; }
+
+        /* Game 3: Catch the Heart */
+        #catch-box { position: relative; width: 100%; height: 300px; background: rgba(0,0,0,0.3); border-radius: 15px; overflow: hidden; margin-top: 20px; }
+        #moving-heart { position: absolute; font-size: 2.5rem; cursor: pointer; transition: top 0.3s, left 0.3s; user-select: none; }
+    </style>
+</head>
+<body>
+
+    <ul class="bg-bubbles">
+        <li></li><li></li><li></li><li></li><li></li>
+        <li></li><li></li><li></li><li></li><li></li>
+    </ul>
+
+    <div id="countdown-screen">
+        <div class="timer-box" id="timer">00d : 00h : 00m : 00s</div>
+        <div class="waiting-text">Patience, my love. A whole world is waiting for you...</div>
+    </div>
+
+    <div id="main-website">
+
+        <section class="reveal">
+            <h1 class="glowing-text">Happy Birthday, Beautiful!</h1>
+            <p style="font-size: 1.5rem;">I didn't just want to buy you a gift. I wanted to build you a world. A place that belongs only to us, hidden away until the perfect moment. Scroll down to see what I've made for you.</p>
+            <div style="font-size: 3rem; margin-top: 30px; animation: bounce 2s infinite;">👇</div>
+            <style>@keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(15px); } }</style>
+        </section>
+
+        <section class="reveal">
+            <h2 class="glowing-text" style="font-size: 2.5rem;">To The Girl Who Changed Everything</h2>
+            <p>From the very first moment you walked into my life, everything just made sense. You brought colors to my world that I didn't even know existed. Today is the day the world was blessed with you, but I feel like I'm the one who got the greatest gift. This page, these words, and these memories are just a fraction of how much you mean to me.</p>
+        </section>
+
+        <section class="reveal">
+            <h2 class="glowing-text" style="font-size: 2.5rem;">A Few of My Favorite Moments</h2>
+            <div class="media-container">
+                <div class="glass-card">
+                    <img src="photo1.jpg" alt="Our Memory" onerror="this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=500&q=80'">
+                    <div class="caption">Your smile here is my favorite thing in the world.</div>
+                </div>
+                <div class="glass-card">
+                    <img src="photo2.jpg" alt="Our Memory" onerror="this.src='https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=500&q=80'">
+                    <div class="caption">I still remember this day like it was yesterday.</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <div class="game-container">
+                <h2 class="glowing-text" style="font-size: 2rem;">Game 1: Do you remember?</h2>
+                <p>Let's see how sharp your memory is. What was the exact date we first met/started talking?</p>
+                <input type="text" id="quiz-answer" placeholder="e.g., 14 Feb" style="padding: 10px; font-size: 1.2rem; border-radius: 10px; border: none; outline: none; text-align: center;">
+                <br><br>
+                <button class="btn" onclick="checkQuiz()">Submit Answer</button>
+                
+                <div id="surprise-1" class="surprise-box">
+                    <strong>🎉 Correct! 🎉</strong><br>
+                    "You are the best thing I never planned. The ultimate surprise. Winning this just proves that our beginning is as unforgettable to you as it is to me."
+                </div>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="glowing-text" style="font-size: 2.5rem;">Moving Memories</h2>
+            <p>Pictures are great, but seeing you laugh in motion is my therapy.</p>
+            <div class="glass-card" style="max-width: 600px;">
+                <video controls>
+                    <source src="video1.mp4" type="video/mp4">
+                    Video not supported.
+                </video>
+                <div class="caption">Just look at you. Perfect.</div>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <div class="quote">
+                "I loved you yesterday, I love you still, I always have, and I always will. You are my today and all of my tomorrows."
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="glowing-text" style="font-size: 2.5rem;">Because Two Weren't Enough</h2>
+            <div class="media-container">
+                <div class="glass-card">
+                    <img src="photo3.jpg" alt="Our Memory" onerror="this.src='https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=500&q=80'">
+                    <div class="caption">We look so good together, don't we?</div>
+                </div>
+                <div class="glass-card">
+                    <img src="photo4.jpg" alt="Our Memory" onerror="this.src='https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=500&q=80'">
+                    <div class="caption">I want to make a million more memories just like this.</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <div class="game-container">
+                <h2 class="glowing-text" style="font-size: 2rem;">Game 2: Match the Love</h2>
+                <p>Find the matching pairs to unlock your next surprise!</p>
+                <div class="memory-grid" id="memory-board"></div>
+                
+                <div id="surprise-2" class="surprise-box">
+                    <strong>💖 You matched them all! 💖</strong><br>
+                    "Just like these cards, we are a perfect match. I promise to always stand by your side, through all the flips and turns of life."
+                </div>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="glowing-text" style="font-size: 2.5rem;">Listen To Me</h2>
+            <p>I couldn't just type everything. Some things need to be said out loud. Put your headphones on, close your eyes, and play this.</p>
+            <div class="glass-card" style="max-width: 600px;">
+                <audio controls>
+                    <source src="voice-note.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+                <div class="caption">A little message straight from my heart to yours.</div>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="glowing-text" style="font-size: 2.5rem;">One More Edit</h2>
+            <p>I put this together just for today. Hope it makes you smile.</p>
+            <div class="glass-card" style="max-width: 600px;">
+                <video controls>
+                    <source src="video2.mp4" type="video/mp4">
+                    Video not supported.
+                </video>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <div class="game-container">
+                <h2 class="glowing-text" style="font-size: 2rem;">Game 3: Catch My Heart</h2>
+                <p>My heart is always racing when I'm around you. Try to click the moving heart 3 times!</p>
+                <div id="catch-box">
+                    <div id="moving-heart">💝</div>
+                </div>
+                <p id="catch-score" style="margin-top: 10px; font-weight: bold;">Caught: 0 / 3</p>
+                
+                <div id="surprise-3" class="surprise-box">
+                    <strong>💘 You caught it! 💘</strong><br>
+                    "You didn't even have to try, you caught my heart a long time ago. Now keep scrolling for your final letter."
+                </div>
+            </div>
+        </section>
+
+        <section class="reveal" style="margin-bottom: 100px;">
+            <h2 class="glowing-text" style="font-size: 3rem;">Forever & Always</h2>
+            <div class="glass-card" style="max-width: 800px; padding: 40px;">
+                <p style="text-align: left; font-size: 1.2rem; margin-bottom: 15px;">My love,</p>
+                <p style="text-align: left; font-size: 1.2rem; margin-bottom: 15px;">If you've made it this far, I hope you have the biggest smile on your face. I spent time building this because a standard text message or a store-bought card just isn't enough to contain how I feel about you.</p>
+                <p style="text-align: left; font-size: 1.2rem; margin-bottom: 15px;">You are my safe place, my biggest inspiration, and my favorite notification. Every day with you feels like a blessing. I want to celebrate every birthday with you, hold your hand through every challenge, and laugh with you until our stomachs hurt.</p>
+                <p style="text-align: left; font-size: 1.2rem; margin-bottom: 15px;">Happy 26th of June. Happy Birthday, my absolute world. I love you more than code, more than words, and more than anything.</p>
+                <p style="text-align: right; font-size: 1.3rem; font-weight: bold; color: var(--primary);">Yours,<br>Always.</p>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // --- 0. SCROLL ANIMATIONS ---
+        const reveals = document.querySelectorAll('.reveal');
+        const revealOptions = { threshold: 0.15, rootMargin: "0px 0px -50px 0px" };
+        const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('active');
+            });
+        }, revealOptions);
+        reveals.forEach(reveal => revealOnScroll.observe(reveal));
+
+        // --- 1. COUNTDOWN & UNLOCK LOGIC ---
+        const targetDate = new Date(2026, 5, 26, 0, 0, 0).getTime(); // June 26
+        const timerElement = document.getElementById('timer');
+        const countdownScreen = document.getElementById('countdown-screen');
+        const mainWebsite = document.getElementById('main-website');
+
+        const countdownInterval = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            /* =========================================================================
+               🚀 🚀 🚀 DEVELOPER HACK: UNLOCK WEBSITE NOW 🚀 🚀 🚀 
+               Change the line below from: if (distance < 0) {   to:   if (true) {
+            ========================================================================== */
+            if (distance < 0) { 
+                clearInterval(countdownInterval);
+                unlockWebsite();
+            } else {
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                timerElement.innerHTML = `${days}d : ${hours}h : ${minutes}m : ${seconds}s`;
+            }
+        }, 1000);
+
+        function unlockWebsite() {
+            countdownScreen.style.opacity = '0';
+            setTimeout(() => {
+                countdownScreen.style.display = 'none';
+                mainWebsite.style.display = 'block';
+            }, 1000);
+        }
+
+        // --- GAME 1: QUIZ ---
+        function checkQuiz() {
+            const answer = document.getElementById('quiz-answer').value.toLowerCase();
+            if(answer.length > 2) { 
+                document.getElementById('surprise-1').style.display = 'block';
+            } else {
+                alert("Try again! (Type anything longer than 2 letters to test it)");
+            }
+        }
+
+        // --- GAME 2: MEMORY MATCH ---
+        const memoryBoard = document.getElementById('memory-board');
+        const mCards = ['🌹', '🌹', '💍', '💍', '💌', '💌', '🧸', '🧸'];
+        let flipped = [];
+        let matched = 0;
+
+        mCards.sort(() => 0.5 - Math.random());
+        mCards.forEach((symbol) => {
+            let card = document.createElement('div');
+            card.classList.add('m-card');
+            card.dataset.symbol = symbol;
+            card.innerHTML = '?';
+            card.addEventListener('click', function() {
+                if (flipped.length < 2 && !this.classList.contains('flipped')) {
+                    this.classList.add('flipped');
+                    this.innerHTML = this.dataset.symbol;
+                    flipped.push(this);
+                    if (flipped.length === 2) setTimeout(checkMemoryMatch, 600);
+                }
+            });
+            memoryBoard.appendChild(card);
+        });
+
+        function checkMemoryMatch() {
+            if (flipped[0].dataset.symbol === flipped[1].dataset.symbol) {
+                matched++;
+                if (matched === 4) document.getElementById('surprise-2').style.display = 'block';
+            } else {
+                flipped[0].classList.remove('flipped'); flipped[0].innerHTML = '?';
+                flipped[1].classList.remove('flipped'); flipped[1].innerHTML = '?';
+            }
+            flipped = [];
+        }
+
+        // --- GAME 3: CATCH THE HEART ---
+        const heart = document.getElementById('moving-heart');
+        const catchBox = document.getElementById('catch-box');
+        let caught = 0;
+
+        function moveHeart() {
+            let maxX = catchBox.clientWidth - 50;
+            let maxY = catchBox.clientHeight - 50;
+            heart.style.left = Math.random() * maxX + 'px';
+            heart.style.top = Math.random() * maxY + 'px';
+        }
+        
+        setInterval(moveHeart, 1000);
+        moveHeart();
+
+        heart.addEventListener('click', function() {
+            caught++;
+            document.getElementById('catch-score').innerText = `Caught: ${caught} / 3`;
+            moveHeart();
+            if(caught >= 3) {
+                document.getElementById('surprise-3').style.display = 'block';
+                heart.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
